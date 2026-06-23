@@ -1,0 +1,21 @@
+// Autor: Mauricio Avilés
+// Fecha: 12/05/2026
+// Descripción: Representa un nodo individual en una lista
+//				enlazada.
+
+#pragma once
+
+template <typename E>
+class Node {
+public:
+	E element;
+	Node<E>* next;
+
+	Node(E element, Node<E>* next = nullptr) {
+		this->element = element;
+		this->next = next;
+	}
+	Node(Node<E>* next = nullptr) {
+		this->next = next;
+	}
+};
