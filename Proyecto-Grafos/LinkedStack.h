@@ -1,7 +1,9 @@
+//Pila con nodos enlazados
+
 #pragma once
 #include <stdexcept>
 #include <iostream>
-#include "StackNode.h"
+#include "Node.h"
 #include "Stack.h"
 
 using std::cout;
@@ -11,7 +13,7 @@ using std::runtime_error;
 template <typename E>
 class LinkedStack : public Stack<E> {
 private:
-	StackNode<E>* top;
+	Node<E>* top;
 	int size;
 
 public:
@@ -23,14 +25,14 @@ public:
 		clear();
 	}
 	void push(E element) {
-		top = new StackNode<E>(element, top);
+		top = new Node<E>(element, top);
 		size++;
 	}
 	E pop() {
 		if (size == 0)
 			throw runtime_error("Stack is empty.");
 		E result = top->element;
-		StackNode<E>* temp = top;
+		Node<E>* temp = top;
 		top = top->next;
 		delete temp;
 		size--;
@@ -43,7 +45,7 @@ public:
 	}
 
 	void clear() {
-		StackNode<E>* temp;
+		Node<E>* temp;
 		while (size > 0) {
 			temp = top;
 			top = top->next;
@@ -61,7 +63,7 @@ public:
 	}
 	void print() {
 		cout << "[ ";
-		StackNode<E>* temp = top;
+		Node<E>* temp = top;
 		while (temp != nullptr) {
 			cout << temp->element;
 			if (temp->next != nullptr)

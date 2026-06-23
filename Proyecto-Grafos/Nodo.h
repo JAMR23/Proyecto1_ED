@@ -1,3 +1,4 @@
+// Un nodo del grafo con identificador y posición
 #pragma once
 
 class Nodo {

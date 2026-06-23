@@ -1,3 +1,4 @@
+// Autor: Jessica Vargas
 //Representa un arco (arista) de un grafo no dirigido
 //Conecta dos nodos y almacena la distancia entre ellos.
 
@@ -21,7 +22,7 @@ public:
     Arco(int nodo1, int nodo2, int peso) {
         this->nodo1 = nodo1;
         this->nodo2 = nodo2;
-        this->distancia = distancia;
+        this->distancia = peso;
     }
 
     int getNodo1() const {

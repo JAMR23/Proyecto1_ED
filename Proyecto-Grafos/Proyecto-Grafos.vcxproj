@@ -131,15 +131,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arco.h" />
-    <ClInclude Include="BusqProfundidad.h" />
     <ClInclude Include="Grafo.h" />
     <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="LinkedQueue.h" />
     <ClInclude Include="LinkedStack.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Nodo.h" />
+    <ClInclude Include="Queue.h" />
     <ClInclude Include="Stack.h" />
-    <ClInclude Include="StackNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

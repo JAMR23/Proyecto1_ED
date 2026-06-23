@@ -11,6 +11,8 @@
 #include "Arco.h"
 #include "Matrix.h"
 #include "LinkedList.h"
+#include "LinkedStack.h"
+#include "LinkedQueue.h"
 
 using std::runtime_error;
 using std::srand;
@@ -18,6 +20,7 @@ using std::rand;
 using std::time;
 using std::cout;
 using std::endl;
+
 
 class Grafo {
 private:
@@ -29,7 +32,7 @@ private:
 	int prob; // decidir aleatoriamente si los nodos están conectados o no, en base a cantNodos
 
 
-public: 
+public:
 	// Por cada celda, decidir aleatoriamente si los nodos están conectados (hay un arco) o no, si hay, asignar una distancia aleatoria (dentro del rango) al arco.
 	Grafo() {
 		this->cantNodos = 100;
@@ -38,7 +41,7 @@ public:
 		this->prob = cantNodos / 10;
 		if (prob < 1)
 			prob = 1;
-		
+
 		matrizAdyacencia = new Matrix<int>(cantNodos, cantNodos);
 		matrizAdyacencia->setAll(0);
 		listaAdyacencia = new LinkedList<Arco>[cantNodos];
@@ -63,4 +66,106 @@ public:
 		delete matrizAdyacencia;
 		delete[] listaAdyacencia;
 	}
+
+	int getCantNodos() {
+		return cantNodos;
+	}
+
+	Matrix<int>* getMatriz() {
+		return matrizAdyacencia;
+	}
+
+	//Avanza lo más lejos que se pueda antes de devolverse 
+	
+	Grafo* DFS(int nodoInicial) {
+		if (nodoInicial < 0 || nodoInicial >= cantNodos)
+			throw runtime_error("Nodo inicial fuera de rango");
+
+		//Arbol de expansion, sin arcos
+		Grafo* arbol = new Grafo();
+		arbol->matrizAdyacencia->setAll(0);
+
+		//nodos no visitados son false
+		bool* visitados = new bool[cantNodos];
+		for (int i = 0; i < cantNodos; i++)
+			visitados[i] = false;
+
+		//pila con indices de nodos
+		LinkedStack<int> pila;
+		pila.push(nodoInicial);
+
+		while (!pila.isEmpty()) {
+			int actual = pila.pop();
+
+			if (visitados[actual])	//saltar si es duplicado
+				continue;
+			visitados[actual] = true;
+
+			// revisar posibles vecinos
+			for (int vecino = 0; vecino < cantNodos; vecino++) {
+				int peso = matrizAdyacencia->getValue(actual, vecino);
+
+				//Hay arco y vecino no visitado
+				if (peso > 0 && !visitados[vecino]) {
+
+					pila.push(vecino);
+
+					//arco en arbol de expansion
+					arbol->matrizAdyacencia->setValue(actual, vecino, peso);
+					arbol->matrizAdyacencia->setValue(vecino, actual, peso);
+
+				}
+			}
+		}
+		delete[] visitados;
+		return arbol;
+	}
+
+	// Revisa todo alrededor antes de avanzar más
+	Grafo* BFS(int nodoInicial) {
+		if (nodoInicial < 0 || nodoInicial >= cantNodos)
+			throw runtime_error("Nodo inicial fuera de rango.");
+
+		//Arbol de expansion, sin arcos
+		Grafo* arbol = new Grafo();
+		arbol->matrizAdyacencia->setAll(0);
+
+		//nodos no visitados son false
+		bool* visitados = new bool[cantNodos];
+		for (int i = 0; i < cantNodos; i++)
+			visitados[i] = false;
+
+		//cola con indices de nodos
+		LinkedQueue<int> cola;
+
+		//marcar inicial
+		visitados[nodoInicial] = true;
+		cola.enqueue(nodoInicial);
+
+		while (!cola.isEmpty()) {
+			int actual = cola.dequeue();
+
+			// revisar posibles vecinos
+			for (int vecino = 0; vecino < cantNodos; vecino++) {
+				int peso = matrizAdyacencia->getValue(actual, vecino);
+
+				//Hay arco y vecino no visitado
+				if (peso > 0 && !visitados[vecino]) {
+					visitados[vecino] = true;
+					cola.enqueue(vecino);
+
+					//arco en arbol de expansion
+					arbol->matrizAdyacencia->setValue(actual, vecino, peso);
+					arbol->matrizAdyacencia->setValue(vecino, actual, peso);
+				}
+			}
+		}
+		delete[] visitados;
+		return arbol;
+	}
+
 };
+
+
+	
+
