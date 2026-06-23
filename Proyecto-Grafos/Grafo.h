@@ -7,6 +7,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
+#include "Nodo.h"
+#include "Arco.h"
 #include "Matrix.h"
 #include "LinkedList.h"
 
@@ -20,7 +22,7 @@ using std::endl;
 class Grafo {
 private:
 	Matrix<int>* matrizAdyacencia; // representación en forma de matriz de adyacencia
-	LinkedList<int>* listaAdyacencia; // representación en forma de lista de adyacencia, como un arreglo de listas
+	LinkedList<Arco>* listaAdyacencia; // representación en forma de lista de adyacencia, como un arreglo de listas
 	int cantNodos; // número de nodos del grafo
 	int maxArcosXNodo; // máximo número de arcos por nodo (para lista de adyacencia)
 	int maxDistancia;  // longitud máxima de los arcos 
@@ -34,23 +36,24 @@ public:
 		this->maxArcosXNodo = 6;
 		this->maxDistancia = 200;
 		this->prob = cantNodos / 10;
-		if (this->prob < 1)
-			this->prob = 1;
+		if (prob < 1)
+			prob = 1;
 		
 		matrizAdyacencia = new Matrix<int>(cantNodos, cantNodos);
 		matrizAdyacencia->setAll(0);
-		listaAdyacencia = new LinkedList<int>[cantNodos];
+		listaAdyacencia = new LinkedList<Arco>[cantNodos];
 
 		srand(time(0));
 		for (int i = 0; i < cantNodos; ++i) {
 			for (int j = i + 1; j < cantNodos; ++j) {
-				int r = rand() % this->prob;
+				int r = rand() % prob;
 				if (r == 0 && listaAdyacencia[i].getSize() < maxArcosXNodo && listaAdyacencia[j].getSize() < maxArcosXNodo) {
-					int w = 1 + (rand() % this->maxDistancia);
-					matrizAdyacencia->setValue(i, j, w);
-					matrizAdyacencia->setValue(j, i, w);
-					listaAdyacencia[i].append(j);
-					listaAdyacencia[j].append(i);
+					int d = 1 + (rand() % maxDistancia);
+					Arco a = Arco(i, j, d);
+					matrizAdyacencia->setValue(i, j, d);
+					matrizAdyacencia->setValue(j, i, d);
+					listaAdyacencia[i].append(a);
+					listaAdyacencia[j].append(a);
 				}
 			}
 		}
